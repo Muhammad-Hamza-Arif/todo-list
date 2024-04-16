@@ -1,6 +1,12 @@
 <template>
   <div class="bg-gray-100 p-4 rounded-lg shadow-md">
     <h2 class="text-2xl font-bold mb-4">All ToDos</h2>
+    <input
+      type="text"
+      v-model="search"
+      placeholder="Search Todo Items"
+      class="p-2 border border-gray-300 rounded-md w-full mb-4"
+    />
     <ul ref="todosList">
       <div
         v-show="loading"
@@ -27,21 +33,31 @@
 import { useTodoStore } from "@/stores/todostore";
 import ViewTodos from "@/components/ViewTodos.vue";
 import { useRouter } from "vue-router";
-import { onMounted, computed } from "vue";
+import { onMounted, computed, ref } from "vue";
+const search = ref("");
 const store = useTodoStore();
-const router = useRouter()
-const getAllTodos = computed(() => store.getTodos);
+const router = useRouter();
+const getAllTodos = computed(() => {
+  const searchName = search.value.toLowerCase().trim();
+  if (!searchName) {
+    return store.getTodos;
+  } else {
+    return store.getTodos.filter((todo) =>
+      todo.title.toLowerCase().includes(searchName)
+    );
+  }
+});
 onMounted(() => {
   store.getTodoItems();
 });
 const deleteTodoItem = async (id) => {
-  await store.deleteTodoItem(id).then(()=>{
-    store.getTodoItems()
+  await store.deleteTodoItem(id).then(() => {
+    store.getTodoItems();
   });
 };
 
 const editTodoItem = async (id) => {
-    store.todoName = "Edit"
+  store.todoName = "Edit";
   await store.getTodoById(id);
   await router.push({ path: `todo/edit/${id}` });
 };

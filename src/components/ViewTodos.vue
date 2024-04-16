@@ -1,8 +1,11 @@
 <template>
-	<li class="bg-white rounded-lg p-4 mb-4">
-		<strong class="text-xl font-semibold">{{ todoItem.title }}</strong>
+	<li class="bg-white rounded-lg p-4 mb-4 flex justify-between">
+		<div>
+			<strong class="text-xl font-semibold">{{ todoItem.title }}</strong>
 		<p class="text-gray-600">{{ todoItem.description }}</p>
-		<button
+		</div>
+		<div>
+			<button
 			@click="deleteTodoItem(todoItem.id)"
 			class="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
 		>
@@ -14,6 +17,7 @@
 		>
 			Edit
 		</button>
+		</div>
 	</li>
 </template>
 
